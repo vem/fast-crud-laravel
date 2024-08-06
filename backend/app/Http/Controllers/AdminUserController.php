@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminUser;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminUserController extends Controller
 {
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $credentials = $request->only(['username', 'password']);
 
@@ -45,5 +46,53 @@ class AdminUserController extends Controller
                 'expire' => $expire,
             ]]
         );
+    }
+
+    public function mine(): JsonResponse
+    {
+        $token = request()->header('Authorization');
+
+        if (!$token) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'Token not found',
+            ]);
+        }
+
+        // SSL 解密 token
+        $token = openssl_decrypt($token, 'AES-256-CBC', env('APP_KEY'), 0, env('APP_IV'));
+        $token = json_decode($token, true);
+
+        if (!$token) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'Invalid token',
+            ]);
+        }
+
+        if ($token['expire'] < time()) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'Token expired',
+            ]);
+        }
+
+        $adminUser = AdminUser::where('username', $token['username'])->first();
+
+        if (!$adminUser) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'User not found',
+            ]);
+        }
+
+        return response()->json([
+            'code' => 0,
+            'data' => [
+                'username' => $adminUser->username,
+                'nickname' => $adminUser->nickname,
+                'avatar'   => $adminUser->avatar,
+            ],
+        ]);
     }
 }

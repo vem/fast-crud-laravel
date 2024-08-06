@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/login', [AdminUserController::class, 'login']);
+Route::post('/sys/authority/user/mine', [AdminUserController::class, 'mine']); //->middleware('auth:sanctum');
