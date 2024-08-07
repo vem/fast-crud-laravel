@@ -158,4 +158,23 @@ class AdminUserController extends Controller
             'data' => $adminPermissionList,
         ]);
     }
+
+    // 获取所有权限列表树
+    // TODO 根据 Token 返回用户权限列表
+    public function tree(): JsonResponse
+    {
+        function getTree($parentId = -1)
+        {
+            $adminPermissionList = AdminPermission::where('parentId', $parentId)->orderBy('sort', 'desc')->get();
+            foreach ($adminPermissionList as $key => $value) {
+                $adminPermissionList[$key]['children'] = getTree($value['id']);
+            }
+            return $adminPermissionList;
+        }
+
+        return response()->json([
+            'code' => 0,
+            'data' => getTree(),
+        ]);
+    }
 }

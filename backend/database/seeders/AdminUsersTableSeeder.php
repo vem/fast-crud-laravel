@@ -14,7 +14,7 @@ class AdminUsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'username'   => 'laravel_super',
+                'username'   => 'super_laravel',
                 'password'   => '$2y$10$IKeTQQ7fQSpP2bOUi9389OrrHYSFY6XADO5doFrn8tsR409UN0AJK',
                 'nickname'   => '超级管理员',
                 'roles'      => '["1"]',
