@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('admin_roles', function (Blueprint $table) {
             $table->id()->comment('主键ID');
             $table->enum('active', ['yes', 'no'])->default('no')->comment('是否启用');
-            $table->string('roleName')->comment('角色名称');
+            $table->string('name')->comment('角色名称');
             $table->text('permissionIds')->nullable()->comment('权限ID集合');
             $table->timestamps();
         });
