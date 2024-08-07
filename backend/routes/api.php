@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AdminUserController::class, 'login']);
 Route::post('/sys/authority/user/mine', [AdminUserController::class, 'mine']); //->middleware('auth:sanctum');
+Route::post('/sys/authority/user/permissions', [AdminUserController::class, 'permissions']); //->middleware('auth:sanctum');

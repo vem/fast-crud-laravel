@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admin_roles', function (Blueprint $table) {
-            $table->id();
-            $table->enum('active', ['yes', 'no']);
-            $table->string('roleName');
-            $table->text('permissionIds')->nullable();
+            $table->id()->comment('主键ID');
+            $table->enum('active', ['yes', 'no'])->default('no')->comment('是否启用');
+            $table->string('roleName')->comment('角色名称');
+            $table->text('permissionIds')->nullable()->comment('权限ID集合');
             $table->timestamps();
         });
     }

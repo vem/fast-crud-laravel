@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('nickname')->nullable();
-            $table->string('avatar')->nullable();
+            $table->string('username')->unique()->comment('用户名');
+            $table->string('password')->comment('密码');
+            $table->string('nickname')->nullable()->comment('昵称');
+            $table->string('avatar')->nullable()->comment('头像');
+            $table->string('roles')->nullable()->comment('角色ID');
             $table->rememberToken();
             $table->timestamps();
         });
