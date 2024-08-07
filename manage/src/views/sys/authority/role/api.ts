@@ -1,5 +1,5 @@
 import { request } from "/src/api/service";
-const apiPrefix = "/sys/authority/role";
+const apiPrefix = "/sys/crud/role";
 export async function GetList(query) {
   return request({
     url: apiPrefix + "/page",
