@@ -10,7 +10,6 @@ export default function ({ expose, authz }) {
   const delRequest = async ({ row }) => {
     return await api.DelObj(row.id);
   };
-
   const addRequest = async ({ form }) => {
     return await api.AddObj(form);
   };
@@ -56,7 +55,7 @@ export default function ({ expose, authz }) {
             sorter: true
           }
         },
-        createTime: {
+        created_at: {
           title: "创建时间",
           type: "datetime",
           column: {
@@ -66,7 +65,7 @@ export default function ({ expose, authz }) {
             show: false
           }
         },
-        updateTime: {
+        updated_at: {
           title: "更新时间",
           type: "datetime",
           column: {

@@ -15,7 +15,7 @@ class AdminRolesTableSeeder extends Seeder
         $roles = [
             [
                 'active'        => 'yes',
-                'roleName'      => '超级管理员',
+                'name'          => '超级管理员',
                 'permissionIds' => json_encode([-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
                 'created_at'    => date('Y-m-d H:i:s'),
                 'updated_at'    => date('Y-m-d H:i:s'),

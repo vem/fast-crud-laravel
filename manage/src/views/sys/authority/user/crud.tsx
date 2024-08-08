@@ -42,7 +42,7 @@ export default function ({ expose }: CreateCrudOptionsProps): CreateCrudOptionsR
             sorter: true
           }
         },
-        createTime: {
+        created_at: {
           title: "创建时间",
           type: "datetime",
           form: { show: false }, // 表单配置

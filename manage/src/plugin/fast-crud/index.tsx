@@ -126,16 +126,16 @@ function install(app, options: any = {}) {
           }
         },
         columns: {
-          createdAt: {
-            title: "创建时间",
-            type: "datetime",
-            form: {
-              show: false
-            },
-            column: {
-              order: 1000
-            }
-          }
+          // createdAt: {
+          //   title: "创建时间",
+          //   type: "datetime",
+          //   form: {
+          //     show: false
+          //   },
+          //   column: {
+          //     order: 1000
+          //   }
+          // }
         }
       };
 
