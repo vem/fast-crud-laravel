@@ -16,9 +16,10 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique()->comment('用户名');
             $table->string('password')->comment('密码');
-            $table->string('nickname')->nullable()->comment('昵称');
+            $table->string('nickName')->nullable()->comment('昵称');
             $table->string('avatar')->nullable()->comment('头像');
             $table->string('roles')->nullable()->comment('角色ID');
+            $table->string('remark')->nullable()->comment('备注');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -129,17 +129,30 @@ export default function ({ expose }: CreateCrudOptionsProps): CreateCrudOptionsR
           title: "角色",
           type: "dict-select",
           dict: dict({
-            url: "/sys/authority/role/list",
+            url: "/sys/crud/adminRole/dict",
             value: "id",
             label: "name"
           }), // 数据字典
           form: {
-            component: { multiple: true }
+            component: { multiple: true },
+            valueResolve({ form }) {
+              if (form.roles == null) return
+              form.roles = JSON.stringify(form.roles)
+            },
           },
           column: {
             width: 250,
             sortable: true
-          }
+          },
+          valueBuilder({ value, row, key }) {
+            // value构建，就是把后台传过来的值转化为前端组件所需要的值
+            // 在pageRequest之后执行转化，然后将转化后的数据放到table里面显示
+            if (row[key]) {
+              try {
+                row[key] = JSON.parse(row[key])
+              } catch (e) { }
+            }
+          },
         }
       }
     }

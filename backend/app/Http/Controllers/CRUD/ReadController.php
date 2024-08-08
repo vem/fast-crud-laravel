@@ -25,4 +25,15 @@ class ReadController extends Controller
             ],
         ]);
     }
+
+    public function getDict($table)
+    {
+        $model = 'App\\Models\\' . ucfirst($table);
+        $list  = $model::all();
+
+        return response()->json([
+            'code' => 0,
+            'data' => $list,
+        ]);
+    }
 }

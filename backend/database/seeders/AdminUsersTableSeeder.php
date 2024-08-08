@@ -16,8 +16,8 @@ class AdminUsersTableSeeder extends Seeder
             [
                 'username'   => 'super_laravel',
                 'password'   => '$2y$10$IKeTQQ7fQSpP2bOUi9389OrrHYSFY6XADO5doFrn8tsR409UN0AJK',
-                'nickname'   => '超级管理员',
-                'roles'      => '["1"]',
+                'nickName'   => '超级管理员',
+                'roles'      => '[1]',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],

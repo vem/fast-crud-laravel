@@ -20,6 +20,7 @@ Route::post('/sys/authority/permission/tree', [AdminUserController::class, 'tree
 Route::prefix('/sys/crud')->group(function () {
     Route::post('{resource}/page', [ReadController::class, 'getList']); // 列表页面
     Route::post('{resource}/info', [ReadController::class, 'getInfo']); // 详情页面
+    Route::post('{resource}/dict', [ReadController::class, 'getDict']); // 字典
     Route::post('{resource}/add', [CreateController::class, 'index']); // 添加
     Route::post('{resource}/update', [UpdateController::class, 'index']); // 修改
     Route::post('{resource}/delete', [DeleteController::class, 'index']); // 删除
