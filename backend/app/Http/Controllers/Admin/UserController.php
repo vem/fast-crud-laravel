@@ -36,28 +36,21 @@ class UserController extends Controller
             ]);
         }
 
-        $expire = time() + 3600 * 24 * 7; // 有效期 7 天
-        $token  = $adminUser->createToken('authToken')->plainTextToken;
+        $token = $adminUser->createToken('authToken')->plainTextToken;
 
         return response()->json([
             'code' => 0,
             'data' => [
-                'token'  => $token,
-                'expire' => $expire,
-            ]]
-        );
+                'token' => $token,
+            ],
+        ]);
     }
 
     public function mine(): JsonResponse
     {
-        $user = request()->user();
         return response()->json([
             'code' => 0,
-            'data' => [
-                'username' => $user->username,
-                'nickname' => $user->nickname,
-                'avatar'   => $user->avatar,
-            ],
+            'data' => request()->user()->only(['username', 'nickName', 'avatar']),
         ]);
     }
 
@@ -105,18 +98,30 @@ class UserController extends Controller
         ]);
     }
 
+    private function checkAndHashPassword(string $password): string
+    {
+        if (strlen($password) < 6) {
+            throw new \Exception('Password must be at least 6 characters');
+        }
+
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
     public function store(): JsonResponse
     {
         $data = request()->all();
         $id   = $data['id'] ?? null;
 
         try {
+            if (isset($data['password']) && $data['password']) {
+                $data['password'] = $this->checkAndHashPassword($data['password']);
+            } else {
+                unset($data['password']);
+            }
             AdminUser::updateOrCreate(['id' => $id], $data);
             return response()->json(['code' => 0]);
         } catch (\Exception $e) {
-            // 操作失败，处理失败情况
             $errorMessage = $e->getMessage();
-            // 可以记录错误日志或返回错误信息
             Log::error('Update or create failed: ' . $errorMessage);
             return response()->json([
                 'code' => 1,
