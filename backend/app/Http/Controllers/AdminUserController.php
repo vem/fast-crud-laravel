@@ -177,4 +177,36 @@ class AdminUserController extends Controller
             'data' => getTree(),
         ]);
     }
+
+    public function getPermissionIds(): JsonResponse
+    {
+        $id        = request('id');
+        $adminRole = AdminRole::find($id);
+
+        if (!$adminRole) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'Role not found',
+            ]);
+        }
+
+        return response()->json([
+            'code' => 0,
+            'data' => json_decode($adminRole->permissionIds ?? '[]'),
+        ]);
+    }
+
+    public function authz(): JsonResponse
+    {
+        $id                       = request('roleId');
+        $permissionIds            = request('permissionIds');
+        $adminRole                = AdminRole::find($id);
+        $adminRole->permissionIds = json_encode($permissionIds);
+        $adminRole->save();
+
+        return response()->json([
+            'code' => 0,
+            'msg'  => 'Success',
+        ]);
+    }
 }

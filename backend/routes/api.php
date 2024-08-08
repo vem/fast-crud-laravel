@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CRUD\CreateController;
+use App\Http\Controllers\CRUD\DeleteController;
+use App\Http\Controllers\CRUD\ReadController;
+use App\Http\Controllers\CRUD\UpdateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\CRUD\ReadController;
-use App\Http\Controllers\CRUD\CreateController;
-use App\Http\Controllers\CRUD\UpdateController;
-use App\Http\Controllers\CRUD\DeleteController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -23,4 +23,6 @@ Route::prefix('/sys/crud')->group(function () {
     Route::post('{resource}/add', [CreateController::class, 'index']); // 添加
     Route::post('{resource}/update', [UpdateController::class, 'index']); // 修改
     Route::post('{resource}/delete', [DeleteController::class, 'index']); // 删除
+    Route::post('adminRole/getPermissionIds', [AdminUserController::class, 'getPermissionIds']);
+    Route::post('adminRole/authz', [AdminUserController::class, 'authz']);
 });
