@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\CRUD;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class ReadController extends Controller
 {
-    public function getList($table)
+    public function getList($table): JsonResponse
     {
         $page   = request('page');
         $limit  = $page['limit'] ?? 10;
@@ -26,7 +27,7 @@ class ReadController extends Controller
         ]);
     }
 
-    public function getDict($table)
+    public function getDict($table): JsonResponse
     {
         $model = 'App\\Models\\' . ucfirst($table);
         $list  = $model::all();

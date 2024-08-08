@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\CRUD;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DeleteController extends Controller
 {
-    public function index($table)
+    public function index($table): JsonResponse
     {
         $model = 'App\\Models\\' . ucfirst($table);
         $model::destroy(request('id'));

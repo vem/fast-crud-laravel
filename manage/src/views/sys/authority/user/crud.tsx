@@ -129,7 +129,7 @@ export default function ({ expose }: CreateCrudOptionsProps): CreateCrudOptionsR
           title: "角色",
           type: "dict-select",
           dict: dict({
-            url: "/sys/crud/adminRole/dict",
+            url: "/sys/authority/role/list",
             value: "id",
             label: "name"
           }), // 数据字典

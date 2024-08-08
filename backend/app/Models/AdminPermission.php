@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AdminPermission extends Model
 {
     use SoftDeletes;
+
+    protected $table = 'admin_permissions';
+
+    protected $fillable = [
+        'title', 'permission', 'sort', 'parentId', 'dbTable',
+    ];
 }

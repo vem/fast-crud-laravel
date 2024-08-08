@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\CRUD;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class UpdateController extends Controller
 {
-    public function index($table)
+    public function index($table): JsonResponse
     {
         $model = 'App\\Models\\' . ucfirst($table);
         $data  = request()->all();
