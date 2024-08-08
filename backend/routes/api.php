@@ -13,7 +13,7 @@ Route::get('user', function (Request $request) {
 
 Route::post('login', [AdminUserController::class, 'login']);
 
-Route::prefix('sys')->group(function () {
+Route::prefix('sys')->middleware('auth:sanctum')->group(function () {
     Route::prefix('authority')->group(function () {
         Route::prefix('permission')->controller(AdminPermissionController::class)->group(function () {
             Route::post('tree', 'tree');
@@ -42,12 +42,12 @@ Route::prefix('sys')->group(function () {
         });
     });
 
-    Route::prefix('crud')->controller(CRUDController::class)->group(function () {
-        Route::post('{resource}/page', 'getList'); // 列表
-        Route::post('{resource}/info', 'getInfo'); // 详情
-        Route::post('{resource}/dict', 'getDict'); // 字典
-        Route::post('{resource}/add', 'store'); // 添加
-        Route::post('{resource}/update', 'store'); // 修改
-        Route::post('{resource}/delete', 'delete'); // 删除
+    Route::prefix('crud/{resource}')->controller(CRUDController::class)->group(function () {
+        Route::post('page', 'getList'); // 列表
+        Route::post('info', 'getInfo'); // 详情
+        Route::post('dict', 'getDict'); // 字典
+        Route::post('add', 'store'); // 添加
+        Route::post('update', 'store'); // 修改
+        Route::post('delete', 'delete'); // 删除
     });
 });

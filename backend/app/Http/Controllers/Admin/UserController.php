@@ -14,7 +14,10 @@ class UserController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
-        $credentials = $request->only(['username', 'password']);
+        $credentials = $request->validate([
+            'username' => ['required'],
+            'password' => ['required'],
+        ]);
 
         // 使用 AdminUser model 查询是否有管理员
         $adminUser = AdminUser::where('username', $credentials['username'])->first();
@@ -33,15 +36,8 @@ class UserController extends Controller
             ]);
         }
 
-        // 生成 JWT token
         $expire = time() + 3600 * 24 * 7; // 有效期 7 天
-        $token  = json_encode([
-            'username' => $adminUser->username,
-            'expire'   => $expire, // 有效期 7 天
-        ]);
-
-        // SSL 加密 token
-        $token = openssl_encrypt($token, 'AES-256-CBC', env('APP_KEY'), 0, env('APP_IV'));
+        $token  = $adminUser->createToken('authToken')->plainTextToken;
 
         return response()->json([
             'code' => 0,
@@ -54,91 +50,21 @@ class UserController extends Controller
 
     public function mine(): JsonResponse
     {
-        $token = request()->header('Authorization');
-
-        if (!$token) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Token not found',
-            ]);
-        }
-
-        // SSL 解密 token
-        $token = openssl_decrypt($token, 'AES-256-CBC', env('APP_KEY'), 0, env('APP_IV'));
-        $token = json_decode($token, true);
-
-        if (!$token) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Invalid token',
-            ]);
-        }
-
-        if ($token['expire'] < time()) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Token expired',
-            ]);
-        }
-
-        $adminUser = AdminUser::where('username', $token['username'])->first();
-
-        if (!$adminUser) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'User not found',
-            ]);
-        }
-
+        $user = request()->user();
         return response()->json([
             'code' => 0,
             'data' => [
-                'username' => $adminUser->username,
-                'nickname' => $adminUser->nickname,
-                'avatar'   => $adminUser->avatar,
+                'username' => $user->username,
+                'nickname' => $user->nickname,
+                'avatar'   => $user->avatar,
             ],
         ]);
     }
 
     public function permissions(): JsonResponse
     {
-        $token = request()->header('Authorization');
-
-        if (!$token) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Token not found',
-            ]);
-        }
-
-        // SSL 解密 token
-        $token = openssl_decrypt($token, 'AES-256-CBC', env('APP_KEY'), 0, env('APP_IV'));
-        $token = json_decode($token, true);
-
-        if (!$token) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Invalid token',
-            ]);
-        }
-
-        if ($token['expire'] < time()) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Token expired',
-            ]);
-        }
-
-        $adminUser = AdminUser::where('username', $token['username'])->first();
-
-        if (!$adminUser) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'User not found',
-            ]);
-        }
-
-        $adminRoleIds = json_decode($adminUser->roles) ?? [];
+        $user         = request()->user();
+        $adminRoleIds = json_decode($user->roles) ?? [];
         if (empty($adminRoleIds)) {
             return response()->json([
                 'code' => 1,

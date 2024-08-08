@@ -120,7 +120,7 @@ function createRequestFunction(service: any) {
     const token = userStore.getToken;
     if (token != null) {
       // @ts-ignore
-      configDefault.headers.Authorization = token;
+      configDefault.headers.Authorization = `Bearer ${token}`;
     }
     return service(Object.assign(configDefault, config));
   };
