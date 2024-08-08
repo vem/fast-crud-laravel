@@ -132,7 +132,27 @@ class UserController extends Controller
 
     public function delete(): JsonResponse
     {
-        AdminUser::destroy(request('id'));
+        $id = request('id');
+        if (!$id) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'ID is required',
+            ]);
+        }
+        if ($id == 1) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'Can not delete the super admin',
+            ]);
+        }
+        if (AdminUser::where('id', $id)->doesntExist()) {
+            return response()->json([
+                'code' => 1,
+                'msg'  => 'User not found',
+            ]);
+        }
+
+        AdminUser::destroy($id);
         return response()->json(['code' => 0]);
     }
 }
