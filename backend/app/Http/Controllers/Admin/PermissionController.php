@@ -21,11 +21,7 @@ class PermissionController extends Controller
             }
             return $adminPermissionList;
         }
-
-        return response()->json([
-            'code' => 0,
-            'data' => getTree(),
-        ]);
+        return $this->response('success', getTree());
     }
 
     public function store(): JsonResponse
@@ -35,22 +31,19 @@ class PermissionController extends Controller
 
         try {
             AdminPermission::updateOrCreate(['id' => $id], $data);
-            return response()->json(['code' => 0]);
+            return $this->response();
         } catch (\Exception $e) {
             // 操作失败，处理失败情况
             $errorMessage = $e->getMessage();
             // 可以记录错误日志或返回错误信息
             Log::error('Update or create failed: ' . $errorMessage);
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Update or create failed: ' . $errorMessage,
-            ]);
+            return $this->response('Update or create failed: ' . $errorMessage);
         }
     }
 
     public function delete(): JsonResponse
     {
         AdminPermission::destroy(request('id'));
-        return response()->json(['code' => 0]);
+        return $this->response();
     }
 }

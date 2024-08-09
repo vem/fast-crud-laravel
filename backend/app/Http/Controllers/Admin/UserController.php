@@ -23,35 +23,23 @@ class UserController extends Controller
         $adminUser = AdminUser::where('username', $credentials['username'])->first();
 
         if (!$adminUser) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'User not found',
-            ]);
+            return $this->response('User not found');
         }
 
         if (!password_verify($credentials['password'], $adminUser->password)) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Invalid password',
-            ]);
+            return $this->response('Invalid password');
         }
 
         $token = $adminUser->createToken('authToken')->plainTextToken;
 
-        return response()->json([
-            'code' => 0,
-            'data' => [
-                'token' => $token,
-            ],
+        return $this->response('success', [
+            'token' => $token,
         ]);
     }
 
     public function mine(): JsonResponse
     {
-        return response()->json([
-            'code' => 0,
-            'data' => request()->user()->only(['username', 'nickName', 'avatar']),
-        ]);
+        return $this->response('success', request()->user()->only(['username', 'nickName', 'avatar']));
     }
 
     public function permissions(): JsonResponse
@@ -59,10 +47,7 @@ class UserController extends Controller
         $user         = request()->user();
         $adminRoleIds = json_decode($user->roles) ?? [];
         if (empty($adminRoleIds)) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'No roles',
-            ]);
+            return $this->response('No roles');
         }
 
         $adminRoles            = AdminRole::where('active', 'yes')->whereIn('id', $adminRoleIds)->get();
@@ -74,10 +59,7 @@ class UserController extends Controller
 
         $adminPermissionList = AdminPermission::whereIn('id', $adminPermissionIdList)->get();
 
-        return response()->json([
-            'code' => 0,
-            'data' => $adminPermissionList,
-        ]);
+        return $this->response('success', $adminPermissionList);
     }
 
     public function getList(): JsonResponse
@@ -87,14 +69,11 @@ class UserController extends Controller
         $offset = $page['offset'] ?? 0;
         $list   = AdminUser::paginate($limit, ['*'], 'page', $offset);
 
-        return response()->json([
-            'code' => 0,
-            'data' => [
-                'limit'   => $limit,
-                'offset'  => $offset,
-                'records' => $list->items(),
-                'total'   => $list->total(),
-            ],
+        return $this->response('success', [
+            'limit'   => $limit,
+            'offset'  => $offset,
+            'records' => $list->items(),
+            'total'   => $list->total(),
         ]);
     }
 
@@ -119,14 +98,11 @@ class UserController extends Controller
                 unset($data['password']);
             }
             AdminUser::updateOrCreate(['id' => $id], $data);
-            return response()->json(['code' => 0]);
+            return $this->response();
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             Log::error('Update or create failed: ' . $errorMessage);
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Update or create failed: ' . $errorMessage,
-            ]);
+            return $this->response('Update or create failed: ' . $errorMessage);
         }
     }
 
@@ -134,25 +110,16 @@ class UserController extends Controller
     {
         $id = request('id');
         if (!$id) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'ID is required',
-            ]);
+            return $this->response('ID is required');
         }
         if ($id == 1) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'Can not delete the super admin',
-            ]);
+            return $this->response('Can not delete the super admin');
         }
         if (AdminUser::where('id', $id)->doesntExist()) {
-            return response()->json([
-                'code' => 1,
-                'msg'  => 'User not found',
-            ]);
+            return $this->response('User not found');
         }
 
         AdminUser::destroy($id);
-        return response()->json(['code' => 0]);
+        return $this->response();
     }
 }
