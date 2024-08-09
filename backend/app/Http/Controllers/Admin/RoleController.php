@@ -38,11 +38,10 @@ class RoleController extends Controller
             AdminRole::updateOrCreate(['id' => $id], $data);
             return $this->response();
         } catch (\Exception $e) {
-            // 操作失败，处理失败情况
             $errorMessage = $e->getMessage();
-            // 可以记录错误日志或返回错误信息
-            Log::error('Update or create failed: ' . $errorMessage);
-            return $this->response('Update or create failed: ' . $errorMessage);
+            $action       = $id ? 'Update' : 'Create';
+            Log::error("$action failed: $errorMessage");
+            return $this->response("$action failed: $errorMessage");
         }
     }
 

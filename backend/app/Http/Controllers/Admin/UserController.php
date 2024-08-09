@@ -101,8 +101,9 @@ class UserController extends Controller
             return $this->response();
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
-            Log::error('Update or create failed: ' . $errorMessage);
-            return $this->response('Update or create failed: ' . $errorMessage);
+            $action       = $id ? 'Update' : 'Create';
+            Log::error("$action failed: $errorMessage");
+            return $this->response("$action failed: $errorMessage");
         }
     }
 
