@@ -43,7 +43,7 @@ Route::prefix('sys')->middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('crud/{resource}')->controller(CRUDController::class)->group(function () {
-        Route::post('page', 'getList'); // 列表
+        Route::get('page', 'getList'); // 列表
         Route::post('info', 'getInfo'); // 详情
         Route::post('dict', 'getDict'); // 字典
         Route::post('add', 'store'); // 添加

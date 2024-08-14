@@ -9,6 +9,23 @@ export const crudResources = [
     },
     children: [
       {
+        title: "Laravel",
+        name: "laravel",
+        path: "/crud/laravel",
+        redirect: "/crud/laravel/first",
+        meta: {
+          icon: "simple-icons:laravel"
+        },
+        children: [
+          {
+            title: "基本表单",
+            name: "LaravelFirst",
+            path: "/crud/laravel/first",
+            component: "/crud/laravel/first/index.vue"
+          },
+        ]
+      },
+      {
         title: "基本特性",
         name: "basis",
         path: "/crud/basis",
