@@ -38,15 +38,18 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
       columns: {
         input_field: {
           title: "输入框",
-          type: "text"
+          type: "text",
+          search: { show: true },
         },
         number_field: {
           title: "数字",
-          type: "number"
+          type: "number",
+          search: { show: true },
         },
         select_single_field: {
           title: "单选",
           type: "dict-select",
+          search: { show: true },
           dict: dict({
             data: [
               { value: "sz", label: "深圳", color: "success" },
@@ -61,6 +64,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
         select_multiple_field: {
           title: "多选",
           type: "dict-select",
+          search: { show: true },
           form: {
             component: {
               multiple: true
@@ -86,6 +90,54 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
             //value解析，就是把组件的值转化为后台所需要的值
             //在form表单点击保存按钮后，提交到后台之前执行转化
             form.select_multiple_field = JSON.stringify(form.select_multiple_field)
+            //  ↑↑↑↑↑ 注意这里是form，不是row
+          },
+        },
+        cascading_field: {
+          title: "级联",
+          type: "dict-cascader",
+          search: { show: true },
+          dict: dict({
+            isTree: true,
+            url: "/mock/dicts/cascaderData?single"
+          }),
+          valueBuilder({ row }) {
+            //value构建，就是把后台传过来的值转化为前端组件所需要的值
+            //在pageRequest之后执行转化，然后将转化后的数据放到table里面显示
+            row.cascading_field = JSON.parse(row.cascading_field)
+            //  ↑↑↑↑↑ 注意这里是row，不是form
+          },
+          valueResolve({ form }) {
+            //value解析，就是把组件的值转化为后台所需要的值
+            //在form表单点击保存按钮后，提交到后台之前执行转化
+            form.cascading_field = JSON.stringify(form.cascading_field)
+            //  ↑↑↑↑↑ 注意这里是form，不是row
+          },
+        },
+        tree_field: {
+          title: "树",
+          search: { show: false },
+          type: "dict-tree",
+          dict: dict({
+            isTree: true,
+            url: "/mock/dicts/cascaderData?single"
+          }),
+          form: {
+            component: {
+              multiple: true,
+              "show-checkbox": true
+            }
+          },
+          valueBuilder({ row }) {
+            //value构建，就是把后台传过来的值转化为前端组件所需要的值
+            //在pageRequest之后执行转化，然后将转化后的数据放到table里面显示
+            row.tree_field = JSON.parse(row.tree_field)
+            //  ↑↑↑↑↑ 注意这里是row，不是form
+          },
+          valueResolve({ form }) {
+            //value解析，就是把组件的值转化为后台所需要的值
+            //在form表单点击保存按钮后，提交到后台之前执行转化
+            form.tree_field = JSON.stringify(form.tree_field)
             //  ↑↑↑↑↑ 注意这里是form，不是row
           },
         },

@@ -11,16 +11,13 @@ class BaseForm extends Model
 
     protected $fillable = [
         'input_field',
+        'number_field',
         'select_single_field',
         'select_multiple_field',
-        'checkbox_field',
-        'number_field',
-        'rich_text_field',
-        'select_field',
         'cascading_field',
-        'date_field',
         'tree_field',
+        'date_field',
+        'rich_text_field',
         'image_field',
-        'switch_field',
     ];
 }

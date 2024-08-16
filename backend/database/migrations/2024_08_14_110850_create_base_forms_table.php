@@ -14,17 +14,14 @@ return new class extends Migration
         Schema::create('base_forms', function (Blueprint $table) {
             $table->id()->primary()->comment('ID');
             $table->string('input_field')->nullable();
+            $table->integer('number_field')->nullable();
             $table->string('select_single_field')->nullable();
             $table->json('select_multiple_field')->nullable();
-            $table->json('checkbox_field')->nullable();
-            $table->integer('number_field')->nullable();
-            $table->text('rich_text_field')->nullable();
-            $table->string('select_field')->nullable();
             $table->json('cascading_field')->nullable();
-            $table->date('date_field')->nullable();
             $table->json('tree_field')->nullable();
+            $table->date('date_field')->nullable();
+            $table->text('rich_text_field')->nullable();
             $table->string('image_field')->nullable();
-            $table->boolean('switch_field')->default(false);
             $table->timestamps();
         });
     }
