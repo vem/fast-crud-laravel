@@ -45,6 +45,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
           title: "数字",
           type: "number",
           search: { show: true },
+          column: { sortable: "custom" },
         },
         select_single_field: {
           title: "单选",

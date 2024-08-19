@@ -20,4 +20,9 @@ class BaseForm extends Model
         'rich_text_field',
         'image_field',
     ];
+
+    public function getFillableFields(): array
+    {
+        return $this->fillable;
+    }
 }
