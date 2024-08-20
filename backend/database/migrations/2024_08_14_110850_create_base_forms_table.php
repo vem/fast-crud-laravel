@@ -19,9 +19,8 @@ return new class extends Migration
             $table->json('select_multiple_field')->nullable();
             $table->json('cascading_field')->nullable();
             $table->json('tree_field')->nullable();
-            $table->date('date_field')->nullable();
-            $table->text('rich_text_field')->nullable();
             $table->string('image_field')->nullable();
+            $table->text('rich_text_field')->nullable();
             $table->timestamps();
         });
     }

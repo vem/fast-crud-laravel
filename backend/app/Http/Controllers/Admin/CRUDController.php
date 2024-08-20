@@ -86,4 +86,15 @@ class CRUDController extends Controller
         $list  = $model::all();
         return $this->response('success', $list);
     }
+
+    public function upload($table): JsonResponse
+    {
+        $file = request()->file('file');
+        if (!$file->isValid()) {
+            return $this->response('Upload failed');
+        }
+
+        $path = $file->store("uploads/$table", 'public');
+        return $this->response('success', ['path' => $path]);
+    }
 }

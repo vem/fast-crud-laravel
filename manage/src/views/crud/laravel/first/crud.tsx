@@ -142,6 +142,32 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
             //  ↑↑↑↑↑ 注意这里是form，不是row
           },
         },
+        image_field: {
+          title: "图片",
+          type: "image-uploader",
+          form: {
+            component: {
+              limit: 1,
+              uploader: {
+                type: "form",
+                action: "sys/crud/baseForm/upload",
+              }
+            },
+            helper: "最大可上传1个文件"
+          },
+          valueBuilder({ row }) {
+            //value构建，就是把后台传过来的值转化为前端组件所需要的值
+            //在pageRequest之后执行转化，然后将转化后的数据放到table里面显示
+            row.image_field = '/api/storage/' + row.image_field
+            //  ↑↑↑↑↑ 注意这里是row，不是form
+          },
+          valueResolve({ form }) {
+            //value解析，就是把组件的值转化为后台所需要的值
+            //在form表单点击保存按钮后，提交到后台之前执行转化
+            form.image_field = form.image_field.replace('/api/storage/', '')
+            //  ↑↑↑↑↑ 注意这里是form，不是row
+          },
+        },
       }
     }
   };

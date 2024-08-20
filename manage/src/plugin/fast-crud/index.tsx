@@ -24,6 +24,7 @@ import _ from "lodash-es";
 import { useCrudPermission } from "../permission";
 import { GetSignedUrl } from "/@/views/crud/component/uploader/s3/api";
 import { ElNotification } from "element-plus";
+import { useUserStore } from '../../store/modules/user'
 
 function install(app, options: any = {}) {
   app.use(UiElement);
@@ -257,13 +258,16 @@ function install(app, options: any = {}) {
       uploadRequest: async ({ action, file, onProgress }) => {
         // @ts-ignore
         const data = new FormData();
+        const userStore = useUserStore()
+        const token = userStore.getToken
         data.append("file", file);
         return await request({
           url: action,
           method: "post",
           timeout: 60000,
           headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
           data,
           onUploadProgress: (p) => {
@@ -274,8 +278,8 @@ function install(app, options: any = {}) {
       successHandle(ret) {
         // 上传完成后的结果处理， 此处应返回格式为{url:xxx,key:xxx}
         return {
-          url: "http://www.docmirror.cn:7070" + ret,
-          key: ret.replace("/api/upload/form/download?key=", "")
+          url: ret.path,
+          key: ret.path,
         };
       }
     }

@@ -79,7 +79,7 @@ export default ({ command, mode }) => {
         "/api": {
           //配套后端 https://github.com/fast-crud/fs-server-js
           target: "http://127.0.0.1:8000",
-          // rewrite: path => path.replace(/^\/api/, ''),
+          rewrite: path => path.replace(/^\/api/, ''),
         }
       }
     }

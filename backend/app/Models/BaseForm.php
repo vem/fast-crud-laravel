@@ -16,9 +16,8 @@ class BaseForm extends Model
         'select_multiple_field',
         'cascading_field',
         'tree_field',
-        'date_field',
-        'rich_text_field',
         'image_field',
+        'rich_text_field',
     ];
 
     public function getFillableFields(): array
