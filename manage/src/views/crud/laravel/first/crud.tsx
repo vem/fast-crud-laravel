@@ -8,6 +8,7 @@ import {
   EditReq,
   UserPageQuery,
   UserPageRes,
+  compute,
 } from "@fast-crud/fast-crud";
 
 export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOptionsRet {
@@ -168,6 +169,45 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
             //  ↑↑↑↑↑ 注意这里是form，不是row
           },
         },
+        rich_text_field: {
+          title: "内容",
+          column: { show: false },
+          type: ["editor-wang5"], // 富文本图片上传依赖file-uploader，请先配置好file-uploader
+          form: {
+            // 动态显隐字段
+            // show: compute(({ form }) => {
+            //   return form.change === "wang";
+            // }),
+            col: {
+              span: 24
+            },
+            rules: [
+              {
+                required: true,
+                message: "此项必填",
+                validator: async (rule, value) => {
+                  if (value.trim() === "<p><br></p>") {
+                    throw new Error("内容不能为空");
+                  }
+                }
+              }
+            ],
+            component: {
+              disabled: compute(({ form }) => {
+                return form.disabled;
+              }),
+              id: "1", // 当同一个页面有多个editor时，需要配置不同的id
+              config: {},
+              uploader: {
+                type: "form",
+                action: "sys/crud/baseForm/upload",
+                buildUrl(res) {
+                  return '/api/storage/' + res.url;
+                }
+              }
+            }
+          }
+        }
       }
     }
   };
